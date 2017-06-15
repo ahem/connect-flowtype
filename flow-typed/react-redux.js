@@ -13,14 +13,20 @@
 import type { Dispatch, Store } from 'redux';
 
 type MapStateToPropsFunc<TOwnProps, TStateProps> = (state: *, props: TOwnProps) => TStateProps;
-type Connector<TProps, TOwnProps> = (component: (props: TProps) => *) => Class<React$Component<void, TOwnProps, void>>
-
+type MapDispatchToProps<TOwnProps, TDispatchProps> = (dispatch: *, props: TOwnProps) => TDispatchProps;
+type Connector<TMergeProps, TOwnProps> = (component: (props: TMergeProps) => *) => Class<React$Component<void, TOwnProps, void>>
 
 declare module 'react-redux' {
     declare function connect<
-            TProps,
             TOwnProps,
-        >(mapStateToProps: MapStateToPropsFunc<TOwnProps, TProps>): Connector<TProps, TOwnProps>
+            TProps,
+            TStateProps,
+            TDispatchProps,
+        >(
+            mapStateToProps: MapStateToPropsFunc<TOwnProps, TStateProps>,
+            mapDispatchToProps: MapStateToPropsFunc<TOwnProps, TDispatchProps>,
+        ): Connector<TStateProps & TDispatchProps, TOwnProps>
+
 
     declare class Provider<TState: *, TAction: *> extends React$Component<void, { store: Store<TState, TAction>, children?: any }, void> { }
 }

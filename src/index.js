@@ -61,19 +61,17 @@ function mapStateToProps(state, props) {
     return {
         value: state.value,
         title: props.title,
-        onUpButtonClick: () => {},
-        onDownButtonClick: () => {},
     };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<Action>, props: {title:string}): $Shape<CounterProps> {
+function mapDispatchToProps(dispatch, props) {
     return {
         onUpButtonClick: () => dispatch(increaseCounter()),
         onDownButtonClick: () => dispatch(decreaseCounter()),
     };
 };
 
-const connector = connect(mapStateToProps);
+const connector = connect(mapStateToProps, mapDispatchToProps);
 const ConnectedCounter = connector(Counter);
 
 // =========== Render ===============================
