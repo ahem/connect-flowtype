@@ -1,14 +1,78 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { createStore } from 'redux';
+import { connect, Provider } from 'react-redux';
 
+// =========== Types ================================
 
-const Counter = ({value, title}) => (
+type Action = {|
+    type: 'INCREASE' | 'DECREASE',
+|};
+
+type State = {|
+    value: number,
+|};
+
+type CounterProps = {|
+    title: string,
+    value: number,
+    onUpButtonClick: () => void,
+    onDownButtonClick: () => void,
+|};
+
+// =========== Store ================================
+
+function reducer(state: State, action: Action) : State {
+    switch (action.type) {
+        case 'INCREASE':
+            return Object.assign(({}: $Shape<State>), state, { value: state.value + 1 });
+        case 'DECREASE':
+            return Object.assign(({}: $Shape<State>), state, { value: state.value - 1 });
+        default:
+            return state;
+    }
+}
+
+const store = createStore(reducer, { value: 7 });
+
+// =========== Actions ==============================
+
+function increaseCounter() {
+    return { type: 'INCREASE' };
+}
+
+function decreaseCounter() {
+    return { type: 'DECREASE' };
+}
+
+// =========== Component ============================
+
+const Counter = ({value, title, onUpButtonClick, onDownButtonClick}: CounterProps) => (
     <div>
         <span>{title}: {value}</span>
-        <button type="button">Up</button>
-        <button type="button">Down</button>
+        <button type="button" onClick={onUpButtonClick}>Up</button>
+        <button type="button" onClick={onDownButtonClick}>Down</button>
     </div>
 );
 
-ReactDOM.render(<Counter title="horse" value={7} />, document.getElementById('app'));
+// =========== Connected Component ==================
+
+const mapStateToProps = (state, props) => ({ value: state.value, title: props.title });
+
+const mapDispatchToProps = (dispatch, props) => ({
+    onUpButtonClick: () => dispatch(increaseCounter()),
+    onDownButtonClick: () => dispatch(decreaseCounter()),
+});
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+const ConnectedCounter = connector(Counter);
+
+// =========== Render ===============================
+
+ReactDOM.render(
+    <Provider store={store}>
+        <ConnectedCounter title="horse" />
+    </Provider>,
+    document.getElementById('app')
+);
 
