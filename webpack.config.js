@@ -5,16 +5,16 @@ const webpack = require('webpack');
 
 module.exports = {
 
-    entry: './src/index.js',
+    entry: './src/index.tsx',
 
     module: {
         rules: [{
-            test: /\.jsx?$/,
+            test: /\.tsx?$/,
             include: [
                 path.resolve(__dirname, 'src'),
             ],
             exclude: [ path.resolve(__dirname, 'node_modules') ],
-            loader: 'babel-loader',
+            loader: 'awesome-typescript-loader',
         }]
     },
 
@@ -26,7 +26,7 @@ module.exports = {
 
     devServer: {
     },
-
+    
     plugins:[
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify('development')
