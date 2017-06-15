@@ -57,21 +57,30 @@ const Counter = ({value, title, onUpButtonClick, onDownButtonClick}: CounterProp
 
 // =========== Connected Component ==================
 
-const mapStateToProps = (state, props) => ({ value: state.value, title: props.title });
+function mapStateToProps(state, props) {
+    return {
+        value: state.value,
+        title: props.title,
+        onUpButtonClick: () => {},
+        onDownButtonClick: () => {},
+    };
+}
 
-const mapDispatchToProps = (dispatch, props) => ({
-    onUpButtonClick: () => dispatch(increaseCounter()),
-    onDownButtonClick: () => dispatch(decreaseCounter()),
-});
+function mapDispatchToProps(dispatch: Dispatch<Action>, props: {title:string}): $Shape<CounterProps> {
+    return {
+        onUpButtonClick: () => dispatch(increaseCounter()),
+        onDownButtonClick: () => dispatch(decreaseCounter()),
+    };
+};
 
-const connector = connect(mapStateToProps, mapDispatchToProps);
+const connector = connect(mapStateToProps);
 const ConnectedCounter = connector(Counter);
 
 // =========== Render ===============================
 
 ReactDOM.render(
     <Provider store={store}>
-        <ConnectedCounter title="horse" />
+        <ConnectedCounter title="hest" />
     </Provider>,
     document.getElementById('app')
 );

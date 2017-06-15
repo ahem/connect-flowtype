@@ -12,25 +12,16 @@
 
 import type { Dispatch, Store } from 'redux';
 
-type MapStateToProps<TState, TOwnProps: Object, TStateProps: Object> =
-    (state: TState, ownProps: TOwnProps) => TStateProps;
+type MapStateToPropsFunc<TOwnProps, TStateProps> = (state: *, props: TOwnProps) => TStateProps;
+type Connector<TProps, TOwnProps> = (component: (props: TProps) => *) => Class<React$Component<void, TOwnProps, void>>
 
-type MapDispatchToProps<TAction, TOwnProps: Object, TDispatchProps: Object> =
-    ((dispatch: Dispatch<TAction>, ownProps: TOwnProps) => DP);
-
-
-type ConnectArg = (React$Component<*, TProps, *> | (props: TProps) => mixed);
-
-type Connector<TProps, TOwnProps> =
-    (component: ConnectArg) => Class<React$Component<void, TOwnProps, void>>;
 
 declare module 'react-redux' {
-
-    declare function connect<TState, TAction, TOwnProps, TStateProps, TDispatchProps>(
-        mapStateToProps: MapStateToProps<TState, TOwnProps, TStateProps>,
-        mapDispatchToProps: MapDispatchToProps<TAction, TOwnProps, TDispatchProps>
-    ): Connector<TOwnProps, TStateProps>
+    declare function connect<
+            TProps,
+            TOwnProps,
+        >(mapStateToProps: MapStateToPropsFunc<TOwnProps, TProps>): Connector<TProps, TOwnProps>
 
     declare class Provider<TState: *, TAction: *> extends React$Component<void, { store: Store<TState, TAction>, children?: any }, void> { }
-
 }
+
