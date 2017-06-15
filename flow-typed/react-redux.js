@@ -25,7 +25,7 @@ declare module 'react-redux' {
         >(
             mapStateToProps: MapStateToPropsFunc<TOwnProps, TStateProps>,
             mapDispatchToProps: MapStateToPropsFunc<TOwnProps, TDispatchProps>,
-        ): Connector<TStateProps & TDispatchProps, TOwnProps>
+        ): Connector<{|...TStateProps, ...TDispatchProps|}, TOwnProps>
 
 
     declare class Provider<TState: *, TAction: *> extends React$Component<void, { store: Store<TState, TAction>, children?: any }, void> { }
