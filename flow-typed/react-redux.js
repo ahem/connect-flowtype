@@ -37,10 +37,16 @@ type MapStateToPropsFunc<TOwnProps, TStateProps> = (state: *, props: TOwnProps) 
 type MapDispatchToProps<TOwnProps, TDispatchProps> = (state: *, props: TOwnProps) => TDispatchProps;
 
 declare module 'react-redux' {
+    declare function connect<TOwnProps, TProps, TStateProps>(
+        mapStateToProps: MapStateToPropsFunc<TOwnProps, TStateProps>,
+    ): Connector<TOwnProps, TStateProps>;
+
     declare function connect<TOwnProps, TProps, TStateProps, TDispatchProps>(
         mapStateToProps: MapStateToPropsFunc<TOwnProps, TStateProps>,
         mapDispatchToProps: MapDispatchToProps<TOwnProps, TDispatchProps>
     ): Connector<TOwnProps, {| ...TStateProps, ...TDispatchProps |}>;
+
+
     declare class Provider<TState: *, TAction: *> extends React$Component<void, { store: Store<TState, TAction>, children?: any }, void> { }
 }
 
