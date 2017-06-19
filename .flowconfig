@@ -8,4 +8,5 @@
 [options]
 munge_underscores=true
 all=true
+suppress_comment=\\(.\\|\n\\)*\\$ExpectError
 
